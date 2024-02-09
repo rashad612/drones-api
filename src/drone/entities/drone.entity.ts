@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { DRONE_MODELS, DRONE_STATES } from '../drone.constants';
+import { Medication } from '../../medication/entities/medication.entity';
 
 @Entity()
 export class Drone {
@@ -28,4 +29,8 @@ export class Drone {
     default: DRONE_STATES.IDLE,
   })
   state: DRONE_STATES;
+
+  @OneToOne(() => Medication)
+  @JoinColumn()
+  medication?: Medication
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from './config';
+import config  from './config';
 import { AppController } from './app.controller';
 import { DroneModule } from './drone/drone.module';
 import { MedicationModule } from './medication/medication.module';
@@ -13,20 +13,8 @@ import { MedicationModule } from './medication/medication.module';
       load: [config],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('db.host'),
-        port: +configService.get('db.port'),
-        username: configService.get('db.username'),
-        password: configService.get('db.password'),
-        database: configService.get('db.database'),
-        entities: ["dist/**/*.entity{.ts,.js}"],
-        migrations: ["dist/migrations/*{.ts,.js}"],
-        synchronize: true,
-        autoLoadEntities: true,
-      }),
       inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => (configService.get('config.typeorm')),
     }),
     DroneModule,
     MedicationModule,
