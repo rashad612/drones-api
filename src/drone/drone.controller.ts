@@ -5,7 +5,6 @@ import { Controller,
   Body,
   Put,
  } from '@nestjs/common';
-import { ErrorsInterceptor } from '../error.interceptor';
 import { CreateDroneDto } from './dto/create.dto';
 import { LoadDroneDto } from './dto/load.dto';
 import { DroneService } from './drone.service';
@@ -13,7 +12,6 @@ import { Drone } from './entities/drone.entity';
 import { MedicationService } from '../medication/medication.service';
 
 @Controller('drone')
-// @UseInterceptors(ErrorsInterceptor)
 export class DroneController {
 
   constructor(
