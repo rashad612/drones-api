@@ -9,6 +9,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-RUN npm run migration:run
+RUN sleep 30 && npm run migration:docker:run
 
 CMD [ "npm", "run", "start:dev" ]
