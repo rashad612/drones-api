@@ -3,7 +3,7 @@ import { DRONE_MODELS, DRONE_STATES } from '../drone.constants';
 export class CreateDroneDto {
   @IsNotEmpty()
   @Length(3, 100)
-  serialNumber: string;
+  serial_number: string;
   
   @IsNotEmpty()
   @IsEnum(DRONE_MODELS)
@@ -12,7 +12,7 @@ export class CreateDroneDto {
   @IsNotEmpty()
   @IsInt()
   @Max(500)
-  weightLimit: number;
+  weight_limit: number;
 
   @IsNotEmpty()
   @IsInt()

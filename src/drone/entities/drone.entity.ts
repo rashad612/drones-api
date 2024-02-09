@@ -1,13 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { 
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  Unique 
+} from 'typeorm';
 import { DRONE_MODELS, DRONE_STATES } from '../drone.constants';
 import { Medication } from '../../medication/entities/medication.entity';
 
 @Entity()
+@Unique(['serial_number'])
 export class Drone {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ name: 'serial_number', type: 'varchar', length: 100 })
   serial_number: string;
 
   @Column({

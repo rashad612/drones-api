@@ -1,17 +1,38 @@
-import { Controller, UseInterceptors, Get, HttpCode, Post, Body } from '@nestjs/common';
+import { Controller,
+  UseInterceptors,
+  Get,
+  Post,
+  Body,
+  Put,
+ } from '@nestjs/common';
 import { ErrorsInterceptor } from '../error.interceptor';
 import { CreateDroneDto } from './dto/create.dto';
+import { LoadDroneDto } from './dto/load.dto';
 import { DroneService } from './drone.service';
+import { Drone } from './entities/drone.entity';
+import { MedicationService } from '../medication/medication.service';
 
 @Controller('drone')
-@UseInterceptors(ErrorsInterceptor)
+// @UseInterceptors(ErrorsInterceptor)
 export class DroneController {
 
-  constructor(private droneService: DroneService) {}
+  constructor(
+    private droneService: DroneService,
+    private medService: MedicationService,
+  ) {}
   
   @Post()
-  @HttpCode(204)
-  create(@Body() createDroneDto: CreateDroneDto) {
-    this.droneService.create(createDroneDto);
+  async create(@Body() createDroneDto: CreateDroneDto): Promise<Drone> {
+    const drone = await this.droneService.create(createDroneDto);
+    return drone;
+  }
+
+  @Put(':id')
+  async update(@Body() loadDroneDto: LoadDroneDto): Promise<Drone> {
+    const medication = await this.medService.getMedicationByCode(loadDroneDto.medication_code);
+    const drone = await this.droneService.getDroneBySerialNo(loadDroneDto.drone_snumber);
+
+    const loadedDrone = this.droneService.loadDrone(drone, medication);
+    return loadedDrone;
   }
 }

@@ -1,12 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { IsUrl, Matches } from 'class-validator';
 
 @Entity()
+@Unique(['name'])
 export class Medication {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ name: 'name', type: 'varchar', length: 255 })
   @Matches(/^[a-zA-Z0-9_\-]+$/)
   name: string;
 
