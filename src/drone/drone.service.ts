@@ -1,8 +1,9 @@
-import { HttpCode, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Drone } from './entities/drone.entity';
 import { CreateDroneDto } from './dto/create.dto';
+import { BatteryDto } from './dto/battery.dto';
 import { Medication } from '../medication/entities/medication.entity';
 import { DRONE_STATES } from './drone.constants';
 
@@ -30,7 +31,7 @@ export class DroneService {
       throw new HttpException('Drone is busy. Cannot be loaded.', HttpStatus.BAD_REQUEST);
     }
 
-    
+
     drone.state = DRONE_STATES.LOADING;
 
     if (drone.battery < 25) {
@@ -46,5 +47,42 @@ export class DroneService {
     drone.state = DRONE_STATES.LOADED;
     drone.medication = medication;
     return this.droneRepo.save(drone);
+  }
+
+  async getDroneMedication(droneId: number): Promise<Medication> {
+    const drone = await this.droneRepo.findOne({ 
+      where: {
+      id: droneId,
+      },
+      relations: {
+        medication: true,
+      },
+    });
+
+    if (drone.medication) {
+      return drone.medication;
+    } else {
+      throw new HttpException(`Drone doesn't have any loaded medications`, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async getIdleDrones(): Promise<Drone[]> {
+    return this.droneRepo.find({
+      where: {
+        state: DRONE_STATES.IDLE,
+      }
+    });
+  }
+
+  async getDroneBattery(droneId: number): Promise<BatteryDto> {
+    const drone = await this.droneRepo.findOne({ where: {
+      id: droneId,
+    }});
+
+    if (drone) {
+      return { battery: `${drone.battery}%` };
+    } else {
+      throw new HttpException(`no Drones were found with id: ${droneId}`, HttpStatus.NOT_FOUND);
+    }
   }
 }
