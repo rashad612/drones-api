@@ -13,7 +13,7 @@ This is a demo project based on [Nest](https://github.com/nestjs/nest) framework
 
 ## Setup and Running
 
-First of all you need to setup your environment variables, whether you are going to run the project locally or over Docker. You can find a sample of environment variable in the file:
+First of all, you need to set up your environment variables, whether you are going to run the project locally or over Docker. You can find a sample of environment variable in the file:
 `template.env`
 
 Copy it as an env file:
@@ -22,7 +22,7 @@ Copy it as an env file:
 cp template.env .env
 ```
 
-Also you might need these vars exported for Docker, for example (you can change the assigned values as it suits you):
+Also, you might need these vars exported for Docker, for example (you can change the assigned values as it suits you):
 
 ```bash
 export PORT=3000
@@ -41,11 +41,11 @@ Probably the fastest way to run the app in dev mode. Make sure you have [Docker]
 docker compose up --build
 ```
 
-You will have the API running and lisetening on PORT value (3000 by default), and preloaded with data.
+You will have the API running and listening on PORT value (3000 by default), and preloaded with data.
 
 ### Running Locally
 
-- You need PostgreSQL srever up and running with username/password/db name as mentioned above in the env vars. You can save up some time and run PostgreSQL in a Docker container (All commands above from the terminal shell):
+- You need PostgreSQL server up and running with username/password/db name as mentioned above in the env vars. You can save up some time and run PostgreSQL in a Docker container (All commands above from the terminal shell):
 
 ```bash
 docker run -d -p 5432:5432 --name drone-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e PGDATA=/var/lib/postgresql/data/pgdata -v /tmp/pgdata:/var/lib/postgresql/data postgres
