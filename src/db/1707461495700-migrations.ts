@@ -12,10 +12,12 @@ export class Migrations1707461495700 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`DELETE FROM "drone"`);
         await queryRunner.query(`ALTER TABLE "drone" DROP CONSTRAINT "FK_0cc4ebb02300454252a639a9ceb"`);
         await queryRunner.query(`DROP TABLE "drone"`);
         await queryRunner.query(`DROP TYPE "public"."drone_state_enum"`);
         await queryRunner.query(`DROP TYPE "public"."drone_model_enum"`);
+        await queryRunner.query(`DELETE FROM "medication"`);
         await queryRunner.query(`DROP TABLE "medication"`);
     }
 

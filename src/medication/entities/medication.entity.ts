@@ -6,7 +6,6 @@ export class Medication {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // 
   @Column({ type: 'varchar', length: 255 })
   @Matches(/^[a-zA-Z0-9_\-]+$/)
   name: string;
