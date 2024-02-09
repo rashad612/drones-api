@@ -1,6 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+ } from '@nestjs/common';
+ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan } from 'typeorm';
 import { Drone } from './entities/drone.entity';
 import { CreateDroneDto } from './dto/create.dto';
 import { BatteryDto } from './dto/battery.dto';
@@ -9,6 +15,7 @@ import { DRONE_STATES } from './drone.constants';
 
 @Injectable()
 export class DroneService {
+  private readonly logger = new Logger(DroneService.name);
   constructor(
     @InjectRepository(Drone)
     private droneRepo: Repository<Drone>,
@@ -84,5 +91,15 @@ export class DroneService {
     } else {
       throw new HttpException(`no Drones were found with id: ${droneId}`, HttpStatus.NOT_FOUND);
     }
+  }
+
+  // Assumption: check low battery levels only.
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  async checkLowBatteryLevels() {
+    const drones = await this.droneRepo.find({ where: {
+      battery: LessThan(25),
+    }});
+    const logMessages = drones.map( d => (`Drone: ${d.serial_number} has low battery (${d.battery}%).`) );
+    this.logger.log(logMessages);
   }
 }
