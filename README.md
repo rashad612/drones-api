@@ -82,6 +82,13 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Testa
+Check if the API service is running:
 
-### @TODO: adding tests.
+```
+localhost:3000
+```
+and you should get a reply: `'Drone API is up and running!'`;
+
+## Tests
+
+@TODO: adding tests.
